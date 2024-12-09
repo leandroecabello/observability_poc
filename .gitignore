@@ -1,0 +1,10 @@
+node_modules
+
+# IDE and Editor Files
+.vscode/
+
+# Optional: Config files
+.env
+
+# Optional: Compiled output
+/build/

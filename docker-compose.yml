@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    environment:
+      - discovery.type=${ELASTIC_DISCOVERY_TYPE:-single-node}
+      - xpack.security.enabled=${ELASTIC_SECURITY_ENABLED:-false} # Desactiva la seguridad
+    ports:
+      - "${ELASTIC_PORT:-9200}:9200"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    environment:
+      - ELASTICSEARCH_HOSTS=${ELASTICSEARCH_HOSTS:-http://elasticsearch:9200}
+      - xpack.security.enabled=${KIBANA_SECURITY_ENABLED:-false} # Desactiva la seguridad
+    ports:
+      - "${KIBANA_PORT:-5601}:5601"
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "${GRAFANA_PORT:-3001}:3000"
