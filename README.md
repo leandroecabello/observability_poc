@@ -52,8 +52,8 @@ observability-poc/
 
 ### **1. Clonar el Repositorio**
 ```bash
-git clone <url-del-repositorio>
-cd <nombre-del-repositorio>
+git clone https://github.com/leandroecabello/observability_poc.git
+cd observability_poc
 ```
 ### **2. Instalar Dependencias**
 ```bash
@@ -136,11 +136,47 @@ Las métricas se exponen en el endpoint `/metrics` y son recolectadas por Promet
   - Tiempo de respuesta superior a 1s.
   - Picos en el uso de memoria.
 
-### **Siguientes Pasos**
+## **Autenticación para Prometheus con Nginx**
+
+### **Generar un archivo .htpasswd**
+Si tienes `htpasswd` instalado, ejecuta el siguiente comando:
+
+```bash
+htpasswd -nb admin mypassword > htpasswd
+```
+
+Esto generará un archivo `htpasswd` con el usuario `admin` y la contraseña `mypassword`.
+
+Si no tienes `htpasswd`, utiliza un generador online como [htpasswd Generator](https://www.htaccesstools.com/htpasswd-generator/).
+
+### **Actualizar el archivo .env**
+Incluye el contenido generado en la variable `HTPASSWD_CONTENT`:
+
+```env
+HTPASSWD_CONTENT=admin:$apr1$xyz$C6rfD9uhypz5e.1jWVjWO0
+```
+
+### **Reconstruir el servicio Nginx**
+Ejecuta los siguientes comandos para reconstruir y levantar el servicio Nginx:
+
+```bash
+docker-compose build nginx
+docker-compose up -d nginx
+```
+
+### **Probar el acceso protegido**
+Accede a Prometheus a través de Nginx:
+
+- **URL**: [http://localhost:8080](http://localhost:8080)
+- **Usuario**: `admin`
+- **Contraseña**: La que generaste
+
+
+## **Siguientes Pasos**
 1. Extender la POC para incluir más métricas (como la tasa de errores).
 2. Implementar alertas en Grafana para notificaciones automáticas.
 3. Optimizar la ingesta de logs con Index Templates en Elasticsearch.
 
-### **Créditos**
+## **Créditos**
 - Autor: Leandro Cabello
 - Fecha: Diciembre 2024
