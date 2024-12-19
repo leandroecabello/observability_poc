@@ -8,3 +8,6 @@ node_modules
 
 # Optional: Compiled output
 /build/
+
+# Credentials .htpasswd
+.htpasswd
